@@ -1,0 +1,6 @@
+# pytest-xprocess cache
+.xprocess/
+
+# SSL
+ssl-example/
+ssl/

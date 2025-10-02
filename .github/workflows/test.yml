@@ -13,5 +13,32 @@ jobs:
       - name: Check out
         uses: actions/checkout@v3
 
+      - name: Set up Python environment
+        uses: ./.github/actions/setup-poetry-env
+        with:
+          poetry-options: --only=check
+          python-version: "3.11"
+          working-directory: dyndns
+
       - name: Run check target
         run: make check
+
+  dyndns-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12', '3.13']
+      fail-fast: false
+    steps:
+      - name: Check out
+        uses: actions/checkout@v3
+
+      - name: Set up Python environment
+        uses: ./.github/actions/setup-poetry-env
+        with:
+          python-version: ${{ matrix.python-version }}
+          working-directory: dyndns
+
+      - name: Run dyndns test target
+        working-directory: dyndns
+        run: make test

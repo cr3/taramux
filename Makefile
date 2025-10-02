@@ -1,5 +1,5 @@
 ENV := .env
-SUBDIRS :=
+SUBDIRS := dyndns
 TARGETS := setup check test coverage
 
 -include $(ENV)

@@ -17,6 +17,7 @@ services:
     networks:
       - lesjardinsdudore_network
       - taramail_network
+      - tarawiki_network
       - network
 
   ipv6nat:
@@ -32,6 +33,8 @@ services:
 
 networks:
   taramail_network:
+    external: true
+  tarawiki_network:
     external: true
   lesjardinsdudore_network:
     external: true

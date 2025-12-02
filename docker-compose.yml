@@ -16,10 +16,9 @@ services:
       - "${HTTPS_BIND:-}:${HTTPS_PORT:-443}:${HTTPS_PORT:-443}"
       - "${HTTP_BIND:-}:${HTTP_PORT:-80}:${HTTP_PORT:-80}"
     networks:
-      - lesjardinsdudore_network
-      - taramail_network
-      - tarawiki_network
-      - network
+      - lesjardinsdudore
+      - taramail
+      - tarawiki
 
   ipv6nat:
     image: robbertkl/ipv6nat
@@ -33,13 +32,7 @@ services:
       - /lib/modules:/lib/modules:ro
 
 networks:
-  taramail_network:
-    external: true
-  tarawiki_network:
-    external: true
-  lesjardinsdudore_network:
-    external: true
-  network:
+  default:
     driver: bridge
     driver_opts:
       com.docker.network.bridge.name: br-taramux
@@ -49,3 +42,12 @@ networks:
       config:
         - subnet: ${IPV4_NETWORK:-172.22.2}.0/24
         - subnet: ${IPV6_NETWORK:-fd4d:6169:6c63:6f78::/64}
+  lesjardinsdudore:
+    external: true
+    name: lesjardinsdudore_default
+  taramail:
+    external: true
+    name: taramail_default
+  tarawiki:
+    external: true
+    name: tarawiki_default

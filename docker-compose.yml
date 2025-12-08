@@ -6,7 +6,7 @@ services:
       - ./dyndns/settings.txt:/settings.txt
 
   haproxy:
-    image: haproxy:3.1
+    image: haproxy:3.3
     restart: always
     volumes:
       - ./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro

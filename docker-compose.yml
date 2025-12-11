@@ -16,6 +16,7 @@ services:
     networks:
       - lesjardinsdudore
       - taramail
+      - taramonit
       - tarawiki
     restart: always
     user: root
@@ -30,6 +31,19 @@ services:
     privileged: true
     security_opt:
       - label=disable
+
+  prometheus:
+    image: prom/prometheus:v3.8.0
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+      - '--storage.tsdb.retention.time=30d'
+    restart: always
 
 networks:
   default:
@@ -48,6 +62,12 @@ networks:
   taramail:
     external: true
     name: taramail_default
+  taramonit:
+    external: true
+    name: taramonit_default
   tarawiki:
     external: true
     name: tarawiki_default
+
+volumes:
+  prometheus-data:

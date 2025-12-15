@@ -21,7 +21,7 @@ pytest-xdocker = "^0.2.7"
 optional = true
 
 [tool.poetry.group.check.dependencies]
-ruff = "^0.0.265"
+ruff = "^0.14.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

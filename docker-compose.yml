@@ -5,6 +5,10 @@ services:
     volumes:
       - ./dyndns/settings.txt:/settings.txt
     restart: always
+    networks:
+      default:
+        aliases:
+          - taramux-dyndns
 
   haproxy:
     image: haproxy:3.3
@@ -14,10 +18,13 @@ services:
       - '${HTTP_BIND:-}:${HTTP_PORT:-80}:${HTTP_PORT:-80}'
       - '${HTTPS_BIND:-}:${HTTPS_PORT:-443}:${HTTPS_PORT:-443}'
     networks:
-      - lesjardinsdudore
-      - taramail
-      - taramonit
-      - tarawiki
+      default:
+        aliases:
+          - taramux-haproxy
+      lesjardinsdudore:
+      taramail:
+      taramonit:
+      tarawiki:
     restart: always
     user: root
 
@@ -44,6 +51,10 @@ services:
       - '--web.console.templates=/usr/share/prometheus/consoles'
       - '--storage.tsdb.retention.time=30d'
     restart: always
+    networks:
+      default:
+        aliases:
+          - taramux-prometheus
 
 networks:
   default:

@@ -5,4 +5,4 @@ global:
 scrape_configs:
   - job_name: 'haproxy'
     static_configs:
-      - targets: ['haproxy:8404']
+      - targets: ['taramux-haproxy:8404']

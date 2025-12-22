@@ -1,18 +1,59 @@
 name: taramux
 services:
+  certbot:
+    image: certbot/certbot:v5.2.2
+    volumes:
+      - ./certbot/deploy-hook.sh:/deploy-hook.sh:ro,Z
+      - certbot-certs:/etc/letsencrypt
+      - certbot-www:/var/www/html
+    environment:
+      - SERVER_HOSTNAME=${SERVER_HOSTNAME}
+    networks:
+      default:
+        aliases:
+          - taramux-certbot
+    command: >
+      sh -c "trap exit TERM; while :; do
+        certbot renew --webroot --webroot-path=/var/www/html --deploy-hook /deploy-hook.sh;
+        sleep 12h;
+      done"
+    entrypoint: ""
+    restart: always
+    healthcheck:
+      test: [ "CMD", "test", "-e", "/etc/letsencrypt/live/${SERVER_HOSTNAME}/fullchain.pem" ]
+      start_period: 10s
+      interval: 10s
+      timeout: 5s
+      retries: 15
+
   dyndns:
     build: dyndns
     volumes:
       - ./dyndns/settings.txt:/settings.txt
-    restart: always
     networks:
       default:
         aliases:
           - taramux-dyndns
+    restart: always
+
+  frontend:
+    build: frontend
+    networks:
+      default:
+        ipv4_address: ${IPV4_NETWORK:-172.22.1}.240
+        aliases:
+          - taramux-frontend
+    restart: always
 
   haproxy:
     image: haproxy:3.3
+    depends_on:
+      certbot:
+        condition: service_healthy
+      frontend:
+        condition: service_started
     volumes:
+      - certbot-certs:/etc/letsencrypt:ro
       - ./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
     ports:
       - '${HTTP_BIND:-}:${HTTP_PORT:-80}:${HTTP_PORT:-80}'
@@ -44,6 +85,10 @@ services:
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - prometheus-data:/prometheus
+    networks:
+      default:
+        aliases:
+          - taramux-prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
@@ -51,10 +96,6 @@ services:
       - '--web.console.templates=/usr/share/prometheus/consoles'
       - '--storage.tsdb.retention.time=30d'
     restart: always
-    networks:
-      default:
-        aliases:
-          - taramux-prometheus
 
 networks:
   default:
@@ -81,4 +122,6 @@ networks:
     name: tarawiki_default
 
 volumes:
+  certbot-certs:
+  certbot-www:
   prometheus-data:

@@ -1,0 +1,33 @@
+{
+  "header": {
+    "title": "taram.ca",
+    "description": "Portail vers les services sous taram.ca."
+  },
+  "services": {
+    "heading": "Services",
+    "count_one": "{{count}} destination en ligne",
+    "count_other": "{{count}} destinations en ligne",
+    "open": "Ouvrir"
+  },
+  "service": {
+    "mail": {
+      "name": "Courriel",
+      "description": "Courriel pour taram.ca (comptes, alias, administration).",
+      "tags": ["courriel", "infrastructure"]
+    },
+    "wiki": {
+      "name": "Wiki",
+      "description": "Documentation et base de connaissances pour l'écosystème Taram.",
+      "tags": ["documentation"]
+    },
+    "status": {
+      "name": "Statut des services",
+      "description": "État des services et incidents en temps réel.",
+      "tags": ["surveillance", "observabilité"]
+    }
+  },
+  "footer": {
+    "copyright": "© {{year}} taram.ca",
+    "code": "Code source"
+  }
+}

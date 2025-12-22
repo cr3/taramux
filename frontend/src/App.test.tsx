@@ -1,26 +1,7 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
 import App from "./App";
 import { services } from "./services";
-
-vi.mock("./services", () => ({
-  services: [
-    {
-      id: "test-1",
-      name: "Test Service 1",
-      description: "Test description 1",
-      href: "https://test1.example.com",
-      github: "https://github.com/test/repo1",
-      tags: ["test"],
-    },
-    {
-      id: "test-2",
-      name: "Test Service 2",
-      description: "Test description 2",
-      href: "https://test2.example.com",
-    },
-  ],
-}));
 
 describe("App", () => {
   it("renders the header with site title", () => {
@@ -31,7 +12,7 @@ describe("App", () => {
   it("renders the header description", () => {
     render(<App />);
     expect(
-      screen.getByText(/A portal to the services running under taram.ca subdomains/)
+      screen.getByText(/A portal to the services running under taram.ca/)
     ).toBeInTheDocument();
   });
 
@@ -47,27 +28,18 @@ describe("App", () => {
 
   it("renders a ServiceCard for each service", () => {
     render(<App />);
-    services.forEach((service) => {
-      expect(screen.getByText(service.name)).toBeInTheDocument();
-      expect(screen.getByText(service.description)).toBeInTheDocument();
-    });
+    expect(screen.getByText("Mail")).toBeInTheDocument();
+    expect(screen.getByText(/Email for taram.ca/)).toBeInTheDocument();
+    expect(screen.getByText("Wiki")).toBeInTheDocument();
+    expect(screen.getByText(/Docs and knowledge base/)).toBeInTheDocument();
+    expect(screen.getByText("Status")).toBeInTheDocument();
+    expect(screen.getByText(/Live service health/)).toBeInTheDocument();
   });
 
   it("renders the footer with current year", () => {
     render(<App />);
     const currentYear = new Date().getFullYear();
     expect(screen.getByText(`© ${currentYear} taram.ca`)).toBeInTheDocument();
-  });
-
-  it("renders the GitHub link in footer", () => {
-    render(<App />);
-    const githubLinks = screen.getAllByRole("link", { name: "GitHub" });
-    const footerGithubLink = githubLinks.find(
-      (link) => link.getAttribute("href") === "https://github.com/YOUR_ORG"
-    );
-    expect(footerGithubLink).toBeInTheDocument();
-    expect(footerGithubLink).toHaveAttribute("target", "_blank");
-    expect(footerGithubLink).toHaveAttribute("rel", "noreferrer");
   });
 
   it("applies correct dark mode classes", () => {

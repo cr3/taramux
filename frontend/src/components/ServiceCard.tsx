@@ -1,15 +1,21 @@
+import { useTranslation } from "react-i18next";
 import type { Service } from "../services";
 
 export function ServiceCard({ service }: { service: Service }) {
+  const { t } = useTranslation();
+  const name = t(`service.${service.id}.name`);
+  const description = t(`service.${service.id}.description`);
+  const tags = t(`service.${service.id}.tags`, { returnObjects: true }) as string[];
+
   return (
     <div className="group rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md dark:border-zinc-800 dark:bg-zinc-950">
       <div className="flex items-start justify-between gap-4">
         <div>
           <h3 className="text-lg font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
-            {service.name}
+            {name}
           </h3>
           <p className="mt-1 text-sm leading-6 text-zinc-600 dark:text-zinc-300">
-            {service.description}
+            {description}
           </p>
         </div>
 
@@ -18,20 +24,20 @@ export function ServiceCard({ service }: { service: Service }) {
           href={service.href}
           target="_blank"
           rel="noreferrer"
-          aria-label={`Open ${service.name}`}
+          aria-label={`${t("services.open")} ${name}`}
         >
-          Open
+          {t("services.open")}
         </a>
       </div>
 
-      {(service.tags?.length ?? 0) > 0 && (
+      {tags && tags.length > 0 && (
         <div className="mt-3 flex flex-wrap gap-2">
-          {service.tags!.map((t) => (
+          {tags.map((tag) => (
             <span
-              key={t}
+              key={tag}
               className="rounded-full bg-zinc-100 px-2.5 py-1 text-xs font-medium text-zinc-700 dark:bg-zinc-900 dark:text-zinc-200"
             >
-              {t}
+              {tag}
             </span>
           ))}
         </div>
@@ -47,16 +53,16 @@ export function ServiceCard({ service }: { service: Service }) {
           {new URL(service.href).host}
         </a>
 
-        {service.github && (
+        {service.code && (
           <>
             <span className="text-zinc-300 dark:text-zinc-700">•</span>
             <a
               className="text-sm font-medium text-zinc-700 underline-offset-4 hover:underline dark:text-zinc-200"
-              href={service.github}
+              href={service.code}
               target="_blank"
               rel="noreferrer"
             >
-              GitHub
+              {t("footer.code")}
             </a>
           </>
         )}

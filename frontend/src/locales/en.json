@@ -1,0 +1,34 @@
+{
+  "header": {
+    "title": "taram.ca",
+    "description": "A portal to the services running under taram.ca."
+  },
+  "services": {
+    "heading": "Services",
+    "count": "{{count}} online destinations",
+    "count_one": "{{count}} online destination",
+    "count_other": "{{count}} online destinations",
+    "open": "Open"
+  },
+  "service": {
+    "mail": {
+      "name": "Mail",
+      "description": "Email for taram.ca (accounts, aliases, admin).",
+      "tags": ["email", "infra"]
+    },
+    "wiki": {
+      "name": "Wiki",
+      "description": "Docs and knowledge base for the Taram ecosystem.",
+      "tags": ["docs"]
+    },
+    "status": {
+      "name": "Status",
+      "description": "Live service health and incidents.",
+      "tags": ["monitoring", "observability"]
+    }
+  },
+  "footer": {
+    "copyright": "© {{year}} taram.ca",
+    "code": "Source code"
+  }
+}

@@ -17,7 +17,7 @@ jobs:
         uses: ./.github/actions/setup-poetry-env
         with:
           poetry-options: --only=check
-          python-version: "3.11"
+          python-version: "3.14"
           working-directory: dyndns
 
       - name: Run check target
@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ['3.11', '3.12', '3.13']
+        python-version: ['3.11', '3.12', '3.13', '3.14']
       fail-fast: false
     steps:
       - name: Check out

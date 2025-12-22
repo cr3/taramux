@@ -2,12 +2,16 @@ import { useTranslation } from "react-i18next";
 import { services } from "./services";
 import { ServiceCard } from "./components/ServiceCard";
 import { LanguageToggle } from "./components/LanguageToggle";
+import backgroundImage from "./assets/taram.jpeg";
 
 export default function App() {
   const { t } = useTranslation();
 
   return (
-    <div className="min-h-screen bg-zinc-50 text-zinc-900 dark:bg-black dark:text-zinc-100">
+    <div
+      className="min-h-screen bg-zinc-50 text-zinc-900 dark:bg-black dark:text-zinc-100 bg-cover bg-center bg-fixed"
+      style={{ backgroundImage: `url(${backgroundImage})` }}
+    >
       <header className="mx-auto max-w-6xl px-6 pt-14">
         <div className="rounded-3xl border border-zinc-200 bg-white p-8 shadow-sm dark:border-zinc-800 dark:bg-zinc-950">
           <div className="flex items-start justify-between gap-4">
@@ -24,8 +28,8 @@ export default function App() {
 
       <main className="mx-auto max-w-6xl px-6 py-10">
         <div className="mb-6 flex items-end justify-between gap-4">
-          <h2 className="text-xl font-semibold tracking-tight">{t("services.heading")}</h2>
-          <p className="text-sm text-zinc-600 dark:text-zinc-300">
+          <h2 className="text-xl font-semibold tracking-tight text-white">{t("services.heading")}</h2>
+          <p className="text-sm text-white">
             {t("services.count", { count: services.length })}
           </p>
         </div>

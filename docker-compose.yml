@@ -1,7 +1,7 @@
 name: taramux
 services:
   certbot:
-    image: certbot/certbot:v5.3.1
+    image: certbot/certbot:v5.4.0
     volumes:
       - ./certbot/deploy-hook.sh:/deploy-hook.sh:ro,Z
       - certbot-certs:/etc/letsencrypt

@@ -3,10 +3,13 @@ services:
   certbot:
     image: certbot/certbot:v5.4.0
     volumes:
-      - ./certbot/deploy-hook.sh:/deploy-hook.sh:ro,Z
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./certbot/deploy-hook.sh:/deploy-hook.sh:ro
+      - ./certbot/docker-reload.py:/docker-reload.py:ro
       - certbot-certs:/etc/letsencrypt
       - certbot-www:/var/www/html
     environment:
+      - COMPOSE_PROJECT_NAME=${COMPOSE_PROJECT_NAME:-taramux}
       - SERVER_HOSTNAME=${SERVER_HOSTNAME}
     networks:
       default:
@@ -19,6 +22,8 @@ services:
       done"
     entrypoint: ""
     restart: always
+    security_opt:
+      - label=disable
     healthcheck:
       test: [ "CMD", "test", "-e", "/etc/letsencrypt/live/${SERVER_HOSTNAME}/fullchain.pem" ]
       start_period: 10s

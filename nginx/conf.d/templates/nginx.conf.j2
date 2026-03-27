@@ -1,0 +1,178 @@
+load_module modules/ngx_stream_module.so;
+
+user  nginx;
+worker_processes  auto;
+
+error_log  /var/log/nginx/error.log notice;
+pid        /var/run/nginx.pid;
+
+
+events {
+    worker_connections  1024;
+}
+
+
+# SNI-based TCP passthrough for HTTPS
+stream {
+    map $ssl_preread_server_name $backend_name {
+        {{ SERVER_HOSTNAME }}   taram_ca_https;
+        lesjardinsdudore.ca     lesjardinsdudore_https;
+        mail.taram.ca           mail_taram_ca_https;
+        status.taram.ca         status_taram_ca_https;
+        wiki.taram.ca           wiki_taram_ca_https;
+    }
+
+    upstream taram_ca_https {
+        server 127.0.0.1:8443;
+    }
+
+    upstream lesjardinsdudore_https {
+        server 172.22.3.240:443;
+    }
+
+    upstream mail_taram_ca_https {
+        server 172.22.1.240:443;
+    }
+
+    upstream status_taram_ca_https {
+        server 172.22.5.240:443;
+    }
+
+    upstream wiki_taram_ca_https {
+        server 172.22.4.240:443;
+    }
+
+    server {
+        listen 443;
+        listen [::]:443;
+        ssl_preread on;
+        proxy_pass $backend_name;
+    }
+}
+
+
+http {
+    include       /etc/nginx/mime.types;
+    default_type  application/octet-stream;
+
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent" "$http_x_forwarded_for"';
+
+    access_log  /var/log/nginx/access.log  main;
+
+    sendfile        on;
+
+    keepalive_timeout  65;
+
+    server_names_hash_max_size 512;
+    server_names_hash_bucket_size 128;
+
+    # HTTP - ACME challenges and redirect for {{ SERVER_HOSTNAME }}
+    server {
+        listen 80;
+        listen [::]:80;
+        root /web;
+        server_name {{ SERVER_HOSTNAME }};
+
+        if ( $request_uri ~* "%0A|%0D" ) { return 403; }
+
+        location ^~ /.well-known/acme-challenge/ {
+            allow all;
+            default_type "text/plain";
+        }
+
+        location / {
+            return 301 https://$host$request_uri;
+        }
+    }
+
+    # HTTP - proxy to lesjardinsdudore.ca
+    server {
+        listen 80;
+        listen [::]:80;
+        server_name lesjardinsdudore.ca;
+
+        location / {
+            proxy_pass http://172.22.3.240;
+            proxy_set_header Host $host;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Real-IP $remote_addr;
+        }
+    }
+
+    # HTTP - proxy to mail.taram.ca
+    server {
+        listen 80;
+        listen [::]:80;
+        server_name mail.taram.ca;
+
+        location / {
+            proxy_pass http://172.22.1.240;
+            proxy_set_header Host $host;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Real-IP $remote_addr;
+        }
+    }
+
+    # HTTP - proxy to status.taram.ca
+    server {
+        listen 80;
+        listen [::]:80;
+        server_name status.taram.ca;
+
+        location / {
+            proxy_pass http://172.22.5.240;
+            proxy_set_header Host $host;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Real-IP $remote_addr;
+        }
+    }
+
+    # HTTP - proxy to wiki.taram.ca
+    server {
+        listen 80;
+        listen [::]:80;
+        server_name wiki.taram.ca;
+
+        location / {
+            proxy_pass http://172.22.4.240;
+            proxy_set_header Host $host;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Real-IP $remote_addr;
+        }
+    }
+
+    # HTTPS - SSL termination for {{ SERVER_HOSTNAME }}
+    server {
+        listen 127.0.0.1:8443 ssl;
+        http2 on;
+
+        ssl_certificate /etc/letsencrypt/live/fullchain.pem;
+        ssl_certificate_key /etc/letsencrypt/live/privkey.pem;
+
+        server_name {{ SERVER_HOSTNAME }};
+
+        include /etc/nginx/includes/sites-default.conf;
+    }
+
+    # Metrics
+    server {
+        listen 8080;
+
+        location /nginx_status {
+            stub_status on;
+            access_log off;
+            allow 10.0.0.0/8;
+            allow 172.16.0.0/12;
+            allow 192.168.0.0/16;
+            deny all;
+        }
+
+        location / {
+            return 404;
+        }
+    }
+
+    include /etc/nginx/conf.d/*.conf;
+}

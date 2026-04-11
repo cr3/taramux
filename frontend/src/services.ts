@@ -6,6 +6,11 @@ export type Service = {
 
 export const services: Service[] = [
   {
+    id: "chat",
+    href: "https://chat.taram.ca",
+    code: "https://github.com/cr3/tarachat",
+  },
+   {
     id: "mail",
     href: "https://mail.taram.ca",
     code: "https://github.com/cr3/taramail",

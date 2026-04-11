@@ -17,6 +17,7 @@ stream {
     map $ssl_preread_server_name $backend_name {
         {{ SERVER_HOSTNAME }}   taram_ca_https;
         lesjardinsdudore.ca     lesjardinsdudore_https;
+        chat.taram.ca           chat_taram_ca_https;
         mail.taram.ca           mail_taram_ca_https;
         status.taram.ca         status_taram_ca_https;
         wiki.taram.ca           wiki_taram_ca_https;
@@ -28,6 +29,10 @@ stream {
 
     upstream lesjardinsdudore_https {
         server 172.22.3.240:443;
+    }
+
+    upstream chat_taram_ca_https {
+        server 192.168.86.20:443;
     }
 
     upstream mail_taram_ca_https {
@@ -95,6 +100,20 @@ http {
 
         location / {
             proxy_pass http://172.22.3.240;
+            proxy_set_header Host $host;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Real-IP $remote_addr;
+        }
+    }
+
+    # HTTP - proxy to chat.taram.ca
+    server {
+        listen 80;
+        listen [::]:80;
+        server_name chat.taram.ca;
+
+        location / {
+            proxy_pass http://192.168.86.20;
             proxy_set_header Host $host;
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
             proxy_set_header X-Real-IP $remote_addr;

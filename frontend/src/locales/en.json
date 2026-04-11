@@ -11,6 +11,11 @@
     "open": "Open"
   },
   "service": {
+    "chat": {
+      "name": "Chat",
+      "description": "Conversational robot for regulations.",
+      "tags": ["chatbot", "regulations"]
+    },
     "mail": {
       "name": "Mail",
       "description": "Email for taram.ca (accounts, aliases, admin).",

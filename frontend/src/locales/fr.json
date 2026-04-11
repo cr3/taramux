@@ -10,6 +10,11 @@
     "open": "Ouvrir"
   },
   "service": {
+    "chat": {
+      "name": "Chat",
+      "description": "Robot conversationnel pour les réglementations.",
+      "tags": ["chat", "réglementations"]
+    },
     "mail": {
       "name": "Courriel",
       "description": "Courriel pour taram.ca (comptes, alias, administration).",

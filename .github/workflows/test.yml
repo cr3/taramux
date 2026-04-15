@@ -32,6 +32,8 @@ jobs:
     steps:
       - name: Check out
         uses: actions/checkout@v6
+        with:
+          submodules: true
 
       - name: Set up Python environment
         uses: ./.github/actions/setup-uv-env

@@ -42,6 +42,7 @@ services:
         aliases:
           - taramux-nginx
       lesjardinsdudore:
+      taralists:
       taramail:
       taramonit:
       tarawiki:
@@ -102,6 +103,9 @@ networks:
   lesjardinsdudore:
     external: true
     name: lesjardinsdudore_default
+  taralists:
+    external: true
+    name: taralists_default
   taramail:
     external: true
     name: taramail_default

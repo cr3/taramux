@@ -10,10 +10,15 @@ export const services: Service[] = [
     href: "https://chat.taram.ca",
     code: "https://github.com/cr3/tarachat",
   },
-   {
+  {
     id: "mail",
     href: "https://mail.taram.ca",
     code: "https://github.com/cr3/taramail",
+  },
+  {
+    id: "lists",
+    href: "https://lists.taram.ca",
+    code: "https://github.com/cr3/taralists",
   },
   {
     id: "wiki",

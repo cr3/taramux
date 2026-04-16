@@ -80,7 +80,7 @@ Setting up
     .. code-block:: text
 
         > git config --global credential.helper manager
-        > git clone https://github.com/cr3/taramux
+        > git clone https://github.com/taradix/taramux
         Cloning into 'taramux'...
 
     - Select "manager"

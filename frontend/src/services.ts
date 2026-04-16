@@ -8,26 +8,26 @@ export const services: Service[] = [
   {
     id: "chat",
     href: "https://chat.taram.ca",
-    code: "https://github.com/cr3/tarachat",
+    code: "https://github.com/taradix/tarachat",
   },
   {
     id: "mail",
     href: "https://mail.taram.ca",
-    code: "https://github.com/cr3/taramail",
+    code: "https://github.com/taradix/taramail",
   },
   {
     id: "lists",
     href: "https://lists.taram.ca",
-    code: "https://github.com/cr3/taralists",
+    code: "https://github.com/taradix/taralists",
   },
   {
     id: "wiki",
     href: "https://wiki.taram.ca",
-    code: "https://github.com/cr3/tarawiki",
+    code: "https://github.com/taradix/tarawiki",
   },
   {
     id: "status",
     href: "https://status.taram.ca",
-    code: "https://github.com/cr3/taramonit",
+    code: "https://github.com/taradix/taramonit",
   },
 ];

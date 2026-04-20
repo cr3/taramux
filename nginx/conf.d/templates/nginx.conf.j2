@@ -20,6 +20,7 @@ stream {
         chat.taram.ca           chat_taram_ca_https;
         lists.taram.ca          lists_taram_ca_https;
         mail.taram.ca           mail_taram_ca_https;
+        meteo.taram.ca          meteo_taram_ca_https;
         status.taram.ca         status_taram_ca_https;
         wiki.taram.ca           wiki_taram_ca_https;
     }
@@ -42,6 +43,10 @@ stream {
 
     upstream mail_taram_ca_https {
         server 172.22.1.240:443;
+    }
+
+    upstream meteo_taram_ca_https {
+        server 172.22.7.240:443;
     }
 
     upstream status_taram_ca_https {
@@ -147,6 +152,20 @@ http {
 
         location / {
             proxy_pass http://172.22.1.240;
+            proxy_set_header Host $host;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Real-IP $remote_addr;
+        }
+    }
+
+    # HTTP - proxy to meteo.taram.ca
+    server {
+        listen 80;
+        listen [::]:80;
+        server_name meteo.taram.ca;
+
+        location / {
+            proxy_pass http://172.22.7.240;
             proxy_set_header Host $host;
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
             proxy_set_header X-Real-IP $remote_addr;

@@ -44,6 +44,7 @@ services:
       lesjardinsdudore:
       taralists:
       taramail:
+      tarameteo:
       taramonit:
       tarawiki:
     restart: always
@@ -109,6 +110,9 @@ networks:
   taramail:
     external: true
     name: taramail_default
+  tarameteo:
+    external: true
+    name: tarameteo_default
   taramonit:
     external: true
     name: taramonit_default

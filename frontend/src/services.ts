@@ -11,14 +11,19 @@ export const services: Service[] = [
     code: "https://github.com/taradix/tarachat",
   },
   {
+    id: "lists",
+    href: "https://lists.taram.ca",
+    code: "https://github.com/taradix/taralists",
+  },
+  {
     id: "mail",
     href: "https://mail.taram.ca",
     code: "https://github.com/taradix/taramail",
   },
   {
-    id: "lists",
-    href: "https://lists.taram.ca",
-    code: "https://github.com/taradix/taralists",
+    id: "meteo",
+    href: "https://meteo.taram.ca",
+    code: "https://github.com/taradix/tarameteo",
   },
   {
     id: "wiki",

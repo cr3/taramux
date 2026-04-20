@@ -26,6 +26,11 @@
       "description": "Email for taram.ca (accounts, aliases, admin).",
       "tags": ["email", "infra"]
     },
+    "meteo": {
+      "name": "Weather",
+      "description": "Weather stations around Taram.",
+      "tags": ["temperature", "pressure"]
+    },
     "wiki": {
       "name": "Wiki",
       "description": "Docs and knowledge base for the Taram ecosystem.",

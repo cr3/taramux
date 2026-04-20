@@ -1,10 +1,11 @@
 Version 0.1.0
 -------------
 
-Released 2026-04-13
+Released 2026-04-20
 
 -   Add Certbot service.
 -   Add Chat service.
 -   Add DynDNS service.
 -   Add HAProxy service.
 -   Add Mailman service.
+-   Add Meteo service.

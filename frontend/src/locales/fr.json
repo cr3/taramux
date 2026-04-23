@@ -30,6 +30,11 @@
       "description": "Courriel pour taram.ca (comptes, alias, administration).",
       "tags": ["courriel", "infrastructure"]
     },
+    "meteo": {
+      "name": "Météo",
+      "description": "Stations météo à Taram.",
+      "tags": ["température", "pression"]
+    },
     "wiki": {
       "name": "Wiki",
       "description": "Documentation et base de connaissances pour l'écosystème Taram.",

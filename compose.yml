@@ -74,7 +74,7 @@ services:
     restart: always
 
   openclaw:
-    image: ghcr.io/openclaw/openclaw:v2026.4.26
+    build: openclaw
     volumes:
       - openclaw-config:/home/node/.openclaw
       - openclaw-workspace:/home/node/.openclaw/workspace

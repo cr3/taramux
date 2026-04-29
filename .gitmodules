@@ -1,3 +1,6 @@
 [submodule "taracert"]
 	path = taracert
 	url = git@github.com:taradix/taracert.git
+[submodule "openclaw"]
+	path = openclaw
+	url = https://github.com/openclaw/openclaw

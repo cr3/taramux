@@ -21,6 +21,17 @@ services:
           - taramux-frontend
     restart: always
 
+  ipv6nat:
+    image: robbertkl/ipv6nat:0.4.4
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /lib/modules:/lib/modules:ro
+    network_mode: "host"
+    restart: always
+    privileged: true
+    security_opt:
+      - label=disable
+
   nginx:
     build: nginx
     depends_on:
@@ -62,16 +73,44 @@ services:
       - '-nginx.scrape-uri=http://taramux-nginx:8080/nginx_status'
     restart: always
 
-  ipv6nat:
-    image: robbertkl/ipv6nat:0.4.4
+  openclaw:
+    image: ghcr.io/openclaw/openclaw:v2026.4.26
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /lib/modules:/lib/modules:ro
-    network_mode: "host"
+      - openclaw-config:/home/node/.openclaw
+      - openclaw-workspace:/home/node/.openclaw/workspace
+      - openclaw-plugin-runtime-deps:/var/lib/openclaw/plugin-runtime-deps
+    environment:
+      HOME: /home/node
+      TERM: xterm-256color
+      OPENCLAW_GATEWAY_TOKEN: ${OPENCLAW_GATEWAY_TOKEN}
+      OPENCLAW_ALLOW_INSECURE_PRIVATE_WS: ${OPENCLAW_ALLOW_INSECURE_PRIVATE_WS:-}
+      TZ: ${TZ:-UTC}
+    ports:
+      - '127.0.0.1:${OPENCLAW_BRIDGE_PORT:-18790}:18790'
+      - '127.0.0.1:${OPENCLAW_GATEWAY_PORT:-18789}:18789'
+    networks:
+      default:
+        aliases:
+          - taramux-openclaw
+    command:
+      - "node"
+      - "dist/index.js"
+      - "gateway"
+      - "--bind"
+      - "lan"
+      - "--port"
+      - "18789"
     restart: always
-    privileged: true
-    security_opt:
-      - label=disable
+    healthcheck:
+      test:
+        - "CMD"
+        - "node"
+        - "-e"
+        - "fetch('http://127.0.0.1:18789/healthz').then((r)=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
 
   prometheus:
     image: prom/prometheus:v3.11.3
@@ -121,4 +160,7 @@ networks:
     name: tarawiki_default
 
 volumes:
+  openclaw-config:
+  openclaw-workspace:
+  openclaw-plugin-runtime-deps:
   prometheus-data:
